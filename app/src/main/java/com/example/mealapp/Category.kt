@@ -8,5 +8,5 @@ data class Category(
 )
 
 data class CategoryResponse(
-    val categoryList : MutableList<Category>
+    val categories : MutableList<Category>
 )
