@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,11 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 
 @Composable
-fun ShowCategories(modifier: Modifier) {
+fun ShowCategories(modifier: Modifier, navController: NavController) {
 
     val categoryViewModel : CategoryViewModel = viewModel()
 
@@ -41,7 +43,8 @@ fun ShowCategories(modifier: Modifier) {
                     modifier = Modifier.align(Alignment.Center),
                     content = {
                         items(categoryList.value.list.size) {
-                            index -> ShowCategory(category = categoryList.value.list[index])
+                            index -> ShowCategory(category = categoryList.value.list[index],
+                                navigateController = navController)
                         }
                     }
                 )
@@ -52,16 +55,22 @@ fun ShowCategories(modifier: Modifier) {
 }
 
 @Composable
-fun ShowCategory(category: Category) {
+fun ShowCategory(category: Category, navigateController: NavController) {
     Column(
-        modifier = Modifier.padding(8.dp).border(1.dp, Color.Cyan),
+        modifier = Modifier
+            .padding(8.dp)
+            .border(1.dp, Color.Cyan),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(
             model = category.strCategoryThumb,
             contentDescription = category.strCategoryDescription)
 
-        Text(text = category.strCategory)
+        Button(onClick = {
+            navigateController.navigate("meals/${category.strCategory}")
+        }) {
+            Text(text = category.strCategory)
+        }
     }
 
 }

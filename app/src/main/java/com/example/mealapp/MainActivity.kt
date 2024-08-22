@@ -11,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.mealapp.ui.theme.MealAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,11 +23,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             MealAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ShowCategories(
+                    Categories(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun Categories(modifier: Modifier) {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "categories") {
+        composable("categories") {
+            ShowCategories(modifier = modifier,
+                navController = navController)
+        }
+        composable("meals/{mealType}") { backStackEntry ->
+            val mealType = backStackEntry.arguments?.getString("mealType") ?: ""
+            MealView(modifier = modifier, mealType = mealType) }
     }
 }
