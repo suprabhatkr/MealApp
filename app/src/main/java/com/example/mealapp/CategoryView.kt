@@ -13,6 +13,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,11 +25,11 @@ import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 
 @Composable
-fun ShowCategories(modifier: Modifier, navController: NavController) {
+fun ShowCategories(modifier: Modifier,
+                   categoryList: MutableState<CategoryState>,
+                   navigateToMeal : (Category) -> Unit) {
 
-    val categoryViewModel : CategoryViewModel = viewModel()
 
-    val categoryList = categoryViewModel.categoryState
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             categoryList.value.loading -> {
@@ -44,7 +45,7 @@ fun ShowCategories(modifier: Modifier, navController: NavController) {
                     content = {
                         items(categoryList.value.list.size) {
                             index -> ShowCategory(category = categoryList.value.list[index],
-                                navigateController = navController)
+                                navigateToMeal)
                         }
                     }
                 )
@@ -55,7 +56,7 @@ fun ShowCategories(modifier: Modifier, navController: NavController) {
 }
 
 @Composable
-fun ShowCategory(category: Category, navigateController: NavController) {
+fun ShowCategory(category: Category, navigateToMeal: (Category) -> Unit) {
     Column(
         modifier = Modifier
             .padding(8.dp)
@@ -67,7 +68,7 @@ fun ShowCategory(category: Category, navigateController: NavController) {
             contentDescription = category.strCategoryDescription)
 
         Button(onClick = {
-            navigateController.navigate("meals/${category.strCategory}")
+            navigateToMeal(category)
         }) {
             Text(text = category.strCategory)
         }

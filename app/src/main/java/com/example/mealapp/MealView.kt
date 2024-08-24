@@ -19,9 +19,9 @@ import coil.compose.AsyncImage
 
 @Composable
 fun MealView(modifier: Modifier,
-             mealType : String = "lamb") {
+             category : Category ) {
 
-    val factory = MealViewModelFactory(mealType)
+    val factory = MealViewModelFactory(category.strCategory)
     val mealViewModel : MealViewModel = viewModel(factory = factory)
     val mealState = mealViewModel.mealState
 
@@ -39,7 +39,7 @@ fun MealView(modifier: Modifier,
                     Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
-                    Text(text = mealType)
+                    Text(text = category.strCategory)
                     LazyVerticalGrid(columns = GridCells.Adaptive(152.dp),
                         modifier = Modifier
                             .fillMaxSize(),

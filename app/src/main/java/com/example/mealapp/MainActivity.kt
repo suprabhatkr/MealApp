@@ -22,27 +22,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MealAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Categories(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                Scaffold(modifier = Modifier.fillMaxSize()) {
+                    MealApp(modifier = Modifier.fillMaxSize())
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Categories(modifier: Modifier) {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = "categories") {
-        composable("categories") {
-            ShowCategories(modifier = modifier,
-                navController = navController)
-        }
-        composable("meals/{mealType}") { backStackEntry ->
-            val mealType = backStackEntry.arguments?.getString("mealType") ?: ""
-            MealView(modifier = modifier, mealType = mealType) }
     }
 }
